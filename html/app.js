@@ -23,47 +23,67 @@ const app = Vue.createApp({
                     this.setText(event.data);
                     break;
                 case "setDoorText":
-                    this.setDoorText(event.data)
+                    this.setDoorText(event.data);
                     break;
                 case "audio":
-                    this.playAudio(event.data)
+                    this.playAudio(event.data);
                     break;
                 default:
                     break;
             }
-        })
+        });
+
+        // Test function for debugging - remove in production
+        this.setupTestControls();
     },
     beforeUnmount() {
-        window.removeEventListener(this.listener);
+        if (this.listener) {
+            window.removeEventListener("message", this.listener);
+        }
     },
     methods: {
         setText(data) {
-            if (data.aim) {
+            if (data.aim !== undefined) {
                 const element = document.getElementById("aim");
-                element.style.display = data.aim;
+                if (element) {
+                    element.style.display = data.aim;
+                }
             }
 
-            if (data.details) {
-                this.coords = data.coords;
-                this.heading = data.heading;
-                this.hash = data.hash;
+            if (data.details !== undefined) {
+                this.coords = data.coords || "";
+                this.heading = data.heading || "";
+                this.hash = data.hash || "";
                 const element = document.getElementById("textDetails");
-                element.style.display = data.details;
+                if (element) {
+                    element.style.display = data.details;
+                }
             }
         },
         setDoorText(data) {
+            console.log("setDoorText called with:", data); // Debug log
+
             if (data.enable) {
+                // Show the door lock UI
                 if (this.doorlockStyleObject["display"] === "none") {
                     this.doorlockClassObject["slide_in"] = true;
+                    this.doorlockClassObject["slide_out"] = false;
                     this.doorlockStyleObject["display"] = "flex";
                 }
 
-                // Set door properties
-                this.doorText = data.text;
-                this.doorAuthorized = data.authorized === true;
+                // Set door properties with proper type checking
+                this.doorText = data.text || "";
+                this.doorAuthorized = Boolean(data.authorized);
                 this.doorKey = data.key || 'E';
 
+                console.log("Door state updated:", {
+                    text: this.doorText,
+                    authorized: this.doorAuthorized,
+                    key: this.doorKey
+                }); // Debug log
+
             } else {
+                // Hide the door lock UI
                 this.doorlockClassObject["slide_in"] = false;
                 this.doorlockClassObject["slide_out"] = true;
 
@@ -73,16 +93,53 @@ const app = Vue.createApp({
                     this.doorText = "";
                     this.doorAuthorized = false;
                     this.doorKey = "E";
-                }, 500);
+                }, 300); // Reduced timeout to match CSS animation
             }
         },
         playAudio(data) {
-            var volume = (data.audio['volume'] / 10) * data.sfx
-            if (volume > 1.0) volume = 1.0;
-            if (data.distance !== 0) volume /= data.distance;
-            const sound = new Audio('sounds/' + data.audio['file']);
-            sound.volume = volume;
-            sound.play();
+            try {
+                var volume = (data.audio['volume'] / 10) * data.sfx;
+                if (volume > 1.0) volume = 1.0;
+                if (data.distance !== 0) volume /= data.distance;
+                const sound = new Audio('sounds/' + data.audio['file']);
+                sound.volume = volume;
+                sound.play();
+            } catch (error) {
+                console.error("Audio playback error:", error);
+            }
+        },
+        // Test function for debugging - remove in production
+        setupTestControls() {
+            // Add keyboard controls for testing
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'l' || event.key === 'L') {
+                    // Test locked state
+                    this.setDoorText({
+                        enable: true,
+                        text: "Door is locked",
+                        authorized: false,
+                        key: "E"
+                    });
+                } else if (event.key === 'u' || event.key === 'U') {
+                    // Test unlocked state
+                    this.setDoorText({
+                        enable: true,
+                        text: "Door is unlocked",
+                        authorized: true,
+                        key: "E"
+                    });
+                } else if (event.key === 'h' || event.key === 'H') {
+                    // Hide door lock
+                    this.setDoorText({
+                        enable: false
+                    });
+                }
+            });
+
+            console.log("Test controls enabled:");
+            console.log("Press 'L' to show locked door");
+            console.log("Press 'U' to show unlocked door");
+            console.log("Press 'H' to hide door lock");
         }
     }
 }).mount('#mainContainer');
