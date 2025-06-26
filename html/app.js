@@ -5,14 +5,15 @@ const app = Vue.createApp({
             heading: "",
             hash: "",
             doorlockStyleObject: {
-                "display": "none",
-                "background-color": "rgb(19, 28, 74)"
+                "display": "none"
             },
             doorlockClassObject: {
                 "slide_in": false,
                 "slide_out": false
             },
-            doorText: ""
+            doorText: "",
+            doorAuthorized: false,
+            doorKey: "E"
         }
     },
     mounted() {
@@ -50,30 +51,31 @@ const app = Vue.createApp({
                 element.style.display = data.details;
             }
         },
-            setDoorText(data) {
-                if (data.enable) {
-                    if (this.doorlockStyleObject["display"] === "none") {
-                        this.doorlockClassObject["slide_in"] = true;
-                        this.doorlockStyleObject["display"] = "flex";
-                    }
-
-                    this.doorlockStyleObject["background-color"] = data.color;
-                    this.doorText = data.text;
-                    this.doorAuthorized = data.authorized === true;
-                    this.doorKey = data.key || 'E';
-
-                } else {
-                    this.doorlockClassObject["slide_in"] = false;
-                    this.doorlockClassObject["slide_out"] = true;
-
-                    setTimeout(() => {
-                        this.doorlockStyleObject["display"] = "none";
-                        this.doorlockClassObject["slide_out"] = false;
-                        this.doorText = "";
-                        this.doorAuthorized = false;
-                    }, 1000);
+        setDoorText(data) {
+            if (data.enable) {
+                if (this.doorlockStyleObject["display"] === "none") {
+                    this.doorlockClassObject["slide_in"] = true;
+                    this.doorlockStyleObject["display"] = "flex";
                 }
-            },
+
+                // Set door properties
+                this.doorText = data.text;
+                this.doorAuthorized = data.authorized === true;
+                this.doorKey = data.key || 'E';
+
+            } else {
+                this.doorlockClassObject["slide_in"] = false;
+                this.doorlockClassObject["slide_out"] = true;
+
+                setTimeout(() => {
+                    this.doorlockStyleObject["display"] = "none";
+                    this.doorlockClassObject["slide_out"] = false;
+                    this.doorText = "";
+                    this.doorAuthorized = false;
+                    this.doorKey = "E";
+                }, 500);
+            }
+        },
         playAudio(data) {
             var volume = (data.audio['volume'] / 10) * data.sfx
             if (volume > 1.0) volume = 1.0;
