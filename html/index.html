@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Door Lock System</title>
+    <title>FiveM Door Lock System</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -14,8 +14,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            background: transparent;
             min-height: 100vh;
             overflow: hidden;
         }
@@ -78,203 +78,122 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Door Lock Container Styles */
+        /* Simple Door Lock Container - FiveM Style */
         .doorlock-container {
             position: absolute;
-            top: 50%;
+            bottom: 150px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(145deg, #2c3e50, #34495e);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            min-width: 350px;
-            text-align: center;
-            backdrop-filter: blur(20px);
-        }
-
-        .door-icon-container {
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        .door-icon {
-            font-size: 80px;
-            color: #ecf0f1;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .lock-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            transition: all 0.4s ease;
-        }
-
-        .lock-icon.locked {
-            color: #e74c3c;
-            animation: lockPulse 2s infinite;
-        }
-
-        .lock-icon.unlocked {
-            color: #27ae60;
-            animation: unlockGlow 2s infinite;
-        }
-
-        @keyframes lockPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        @keyframes unlockGlow {
-            0%, 100% { 
-                transform: translate(-50%, -50%) scale(1);
-                filter: drop-shadow(0 0 5px #27ae60);
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.05);
-                filter: drop-shadow(0 0 15px #27ae60);
-            }
-        }
-
-        .door-status {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .door-status.locked {
-            color: #e74c3c;
-            text-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
-        }
-
-        .door-status.unlocked {
-            color: #27ae60;
-            text-shadow: 0 0 10px rgba(39, 174, 96, 0.3);
-        }
-
-        .door-message {
-            color: #bdc3c7;
-            font-size: 16px;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .key-prompt {
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 8px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .key-icon {
-            color: #f39c12;
-            font-size: 18px;
-            animation: keyShine 2s infinite;
-        }
-
-        @keyframes keyShine {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; filter: drop-shadow(0 0 8px #f39c12); }
-        }
-
-        .key-text {
-            color: #ecf0f1;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .key-button {
-            background: linear-gradient(145deg, #f39c12, #e67e22);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
+            gap: 15px;
+            border: 2px solid;
+            min-width: 200px;
+            font-family: 'Arial', sans-serif;
             font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            font-size: 16px;
+            backdrop-filter: blur(5px);
         }
 
-        .key-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        .doorlock-container.locked {
+            border-color: #ff4757;
+            color: #ff4757;
+        }
+
+        .doorlock-container.unlocked {
+            border-color: #2ed573;
+            color: #2ed573;
+        }
+
+        .key-display {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .status-icon {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+        .status-text {
+            flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Animation Classes */
         .slide_in {
-            animation: slideIn 0.5s ease-out forwards;
+            animation: slideInUp 0.3s ease-out forwards;
         }
 
         .slide_out {
-            animation: slideOut 0.5s ease-in forwards;
+            animation: slideOutDown 0.3s ease-in forwards;
         }
 
-        @keyframes slideIn {
+        @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: translateX(-50%) translateY(20px);
             }
             to {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+                transform: translateX(-50%) translateY(0);
             }
         }
 
-        @keyframes slideOut {
+        @keyframes slideOutDown {
             from {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+                transform: translateX(-50%) translateY(0);
             }
             to {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: translateX(-50%) translateY(20px);
             }
         }
 
-        /* Security Level Indicator */
-        .security-level {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 3px;
+        /* Pulse animation for locked state */
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
-        .security-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+            }
         }
 
-        .security-dot.active.high {
-            background: #e74c3c;
-            box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+        /* Glow animation for unlocked state */
+        .glow {
+            animation: glow 2s infinite;
         }
 
-        .security-dot.active.medium {
-            background: #f39c12;
-            box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
-        }
-
-        .security-dot.active.low {
-            background: #27ae60;
-            box-shadow: 0 0 8px rgba(39, 174, 96, 0.5);
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(46, 213, 115, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 213, 115, 0);
+            }
         }
     </style>
 </head>
@@ -290,48 +209,29 @@
             <div><strong>Hash:</strong> {{ hash }}</div>
         </div>
 
-        <!-- Door Lock Container -->
+        <!-- Simple Door Lock Container - FiveM Style -->
         <div 
             class="doorlock-container"
+            :class="{
+                'locked': !doorAuthorized,
+                'unlocked': doorAuthorized,
+                'pulse': !doorAuthorized,
+                'glow': doorAuthorized,
+                'slide_in': doorlockClassObject.slide_in,
+                'slide_out': doorlockClassObject.slide_out
+            }"
             :style="doorlockStyleObject"
-            :class="doorlockClassObject"
             v-if="doorlockStyleObject.display !== 'none'"
         >
-            <!-- Security Level Indicator -->
-            <div class="security-level">
-                <div class="security-dot" :class="{ active: true, high: !doorAuthorized }"></div>
-                <div class="security-dot" :class="{ active: true, medium: !doorAuthorized }"></div>
-                <div class="security-dot" :class="{ active: doorAuthorized, low: doorAuthorized }"></div>
-            </div>
-
-            <!-- Door Icon with Lock Status -->
-            <div class="door-icon-container">
-                <i class="fas fa-door-closed door-icon"></i>
-                <i class="fas" :class="doorAuthorized ? 'fa-lock-open unlocked' : 'fa-lock locked'" class="lock-icon"></i>
-            </div>
-
-            <!-- Door Status -->
-            <div class="door-status" :class="doorAuthorized ? 'unlocked' : 'locked'">
-                {{ doorAuthorized ? 'Access Granted' : 'Access Denied' }}
-            </div>
-
-            <!-- Door Message -->
-            <div class="door-message">
-                {{ doorText || (doorAuthorized ? 'Door is now unlocked' : 'Authorization required') }}
-            </div>
-
-            <!-- Key Prompt -->
-            <div class="key-prompt" v-if="!doorAuthorized">
-                <i class="fas fa-key key-icon"></i>
-                <span class="key-text">Press</span>
-                <button class="key-button">{{ doorKey || 'E' }}</button>
-                <span class="key-text">to interact</span>
-            </div>
-
-            <!-- Success Message -->
-            <div class="key-prompt" v-if="doorAuthorized" style="background: rgba(39, 174, 96, 0.2); border-color: rgba(39, 174, 96, 0.3);">
-                <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                <span class="key-text" style="color: #27ae60;">Access Authorized</span>
+            <!-- Key Display -->
+            <div class="key-display">{{ doorKey || 'E' }}</div>
+            
+            <!-- Status Icon -->
+            <i class="status-icon" :class="doorAuthorized ? 'fas fa-unlock' : 'fas fa-lock'"></i>
+            
+            <!-- Status Text -->
+            <div class="status-text">
+                {{ doorAuthorized ? 'Unlocked' : 'Locked' }}
             </div>
         </div>
     </div>
